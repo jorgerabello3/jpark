@@ -3,13 +3,14 @@ spring:
     name: jpark
   datasource:
     url: jdbc:postgresql://${POSTGRES_SERVER:localhost}:5432/${POSTGRES_DATABASE:jparkdb}
-    username: ${POTSGRES_USER:root}
-    password: ${POTSGRES_PASSWORD:root}
+    username: ${POSTGRES_USER:root}
+    password: ${POSTGRES_PASSWORD:root}
   jpa:
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
 server:
