@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,4 +34,10 @@ public class CompanyController {
     return new ResponseEntity<>(company, HttpStatus.OK);
   }
 
+  @PutMapping(path = "/{id}")
+  private ResponseEntity<CompanyResponseDTO> update(@PathVariable("id") Long id,
+                                                    @Valid @RequestBody CompanyRequestDTO companyRequestDTO) {
+    CompanyResponseDTO savedCompany = service.update(companyRequestDTO, id);
+    return new ResponseEntity<>(savedCompany, HttpStatus.OK);
+  }
 }
