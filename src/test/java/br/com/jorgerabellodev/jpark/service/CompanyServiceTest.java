@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.instancio.Select.field;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -219,5 +220,27 @@ class CompanyServiceTest {
     verify(repository).findById(anyLong());
     verify(repository, never()).save(any(Company.class));
     verify(mapper, never()).toResponseDTO(any(Company.class));
+  }
+
+  @Test
+  @DisplayName("Given an id should delete a company successfully")
+  void given_an_id_should_delete_a_company_successfully() {
+    Company company = Instancio.create(Company.class);
+
+    when(repository.findById(anyLong())).thenReturn(Optional.of(company));
+
+    assertDoesNotThrow(() -> service.delete(1L));
+
+    verify(repository).delete(any(Company.class));
+  }
+
+  @Test
+  @DisplayName("Given an id should throw  an exception when this id was not found when try to delete")
+  void given_an_id_should_throw_an_exception_when_this_id_was_not_found_when_try_to_delete() {
+    when(repository.findById(anyLong())).thenReturn(Optional.empty());
+
+    assertThrows(CompanyNotFoundException.class, () -> service.delete(1L));
+
+    verify(repository, never()).delete(any(Company.class));
   }
 }

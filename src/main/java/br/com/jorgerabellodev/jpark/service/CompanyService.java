@@ -58,4 +58,9 @@ public class CompanyService {
       return exception;
     });
   }
+
+  public void delete(Long id) {
+    Company company = this.findCompanyById(id);
+    repository.delete(company);
+  }
 }
