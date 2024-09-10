@@ -5,6 +5,7 @@ import br.com.jorgerabellodev.jpark.model.dto.VehicleRequestDTO;
 import br.com.jorgerabellodev.jpark.model.dto.VehicleResponseDTO;
 import br.com.jorgerabellodev.jpark.model.entity.Vehicle;
 import br.com.jorgerabellodev.jpark.model.entity.VehicleType;
+import br.com.jorgerabellodev.jpark.model.mapper.CompanyMapper;
 import br.com.jorgerabellodev.jpark.model.mapper.VehicleMapper;
 import br.com.jorgerabellodev.jpark.repository.VehicleRepository;
 import org.instancio.Instancio;
@@ -35,6 +36,12 @@ class VehicleServiceTest {
 
   @Mock
   private VehicleMapper mapper;
+
+  @Mock
+  private CompanyService companyService;
+
+  @Mock
+  private CompanyMapper companyMapper;
 
   @InjectMocks
   private VehicleService service;

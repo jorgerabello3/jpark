@@ -24,13 +24,13 @@ public class CompanyService {
   public CompanyResponseDTO create(CompanyRequestDTO companyRequestDTO) {
     Company company = mapper.toEntity(companyRequestDTO);
     Company savedCompany = repository.save(company);
-    log.info("Successfully created company: {}", company);
+    log.info("Successfully created company with id: {}", savedCompany.getId());
     return mapper.toResponseDTO(savedCompany);
   }
 
   public CompanyResponseDTO findById(Long id) {
     Company company = this.findCompanyById(id);
-    log.info("Successfully retrieved company by id: {} {}", company, id);
+    log.info("Successfully retrieved company by id: {}", id);
     return mapper.toResponseDTO(company);
   }
 
@@ -48,7 +48,7 @@ public class CompanyService {
 
     Company savedCompany = repository.save(company);
 
-    log.info("Successfully update company by id: {} {}", company, id);
+    log.info("Successfully update company by id: {}", id);
 
     return mapper.toResponseDTO(savedCompany);
   }
@@ -56,7 +56,7 @@ public class CompanyService {
   public void delete(Long id) {
     Company company = this.findCompanyById(id);
     repository.delete(company);
-    log.info("Successfully deleted company by id: {} {}", company, id);
+    log.info("Successfully deleted company by id: {}", id);
   }
 
   private Company findCompanyById(Long id) {

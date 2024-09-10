@@ -11,4 +11,6 @@ public interface CompanyMapper {
   CompanyResponseDTO toResponseDTO(Company company);
 
   Company toEntity(CompanyRequestDTO request);
+
+  Company toEntity(CompanyResponseDTO response);
 }
