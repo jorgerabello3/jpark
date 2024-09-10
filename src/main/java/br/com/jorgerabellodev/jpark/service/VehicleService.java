@@ -1,5 +1,6 @@
 package br.com.jorgerabellodev.jpark.service;
 
+import br.com.jorgerabellodev.jpark.exception.VehicleNotFoundException;
 import br.com.jorgerabellodev.jpark.model.dto.VehicleRequestDTO;
 import br.com.jorgerabellodev.jpark.model.dto.VehicleResponseDTO;
 import br.com.jorgerabellodev.jpark.model.entity.Vehicle;
@@ -23,4 +24,19 @@ public class VehicleService {
     log.info("Successfully created vehicle {}", vehicle);
     return mapper.toResponseDTO(savedVehicle);
   }
+
+  public VehicleResponseDTO findByPlate(String plate) {
+    Vehicle vehicle = this.findByVehiclePlate(plate);
+    log.info("Successfully retrieved vehicle by plate: {} {}", vehicle, plate);
+    return mapper.toResponseDTO(vehicle);
+  }
+
+  private Vehicle findByVehiclePlate(String plate) {
+    return repository.findByPlate(plate).orElseThrow(() -> {
+      VehicleNotFoundException exception = new VehicleNotFoundException("Vehicle not found");
+      log.error("Failed to retrieve vehicle for plate {} {}", plate, exception.getMessage());
+      return exception;
+    });
+  }
+
 }

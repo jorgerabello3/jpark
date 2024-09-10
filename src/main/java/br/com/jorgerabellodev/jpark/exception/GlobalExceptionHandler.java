@@ -60,6 +60,15 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(error, status);
   }
 
+  @ExceptionHandler(VehicleNotFoundException.class)
+  public ResponseEntity<ErrorDTO> handleVehicleNotFoundException(VehicleNotFoundException ex) {
+    HttpStatus status = HttpStatus.NOT_FOUND;
+    ErrorDTO error = ErrorDTO.builder()
+            .message(ex.getMessage())
+            .status(status)
+            .build();
+    return new ResponseEntity<>(error, status);
+  }
 
   private String extractConstraintViolationMessage(String message) {
     String regex = "ERROR: duplicate key value violates unique constraint";
@@ -72,5 +81,4 @@ public class GlobalExceptionHandler {
 
     return "Data integrity violation occurred.";
   }
-
 }

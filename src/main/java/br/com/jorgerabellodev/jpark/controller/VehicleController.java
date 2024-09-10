@@ -1,7 +1,5 @@
 package br.com.jorgerabellodev.jpark.controller;
 
-import br.com.jorgerabellodev.jpark.model.dto.CompanyRequestDTO;
-import br.com.jorgerabellodev.jpark.model.dto.CompanyResponseDTO;
 import br.com.jorgerabellodev.jpark.model.dto.ErrorDTO;
 import br.com.jorgerabellodev.jpark.model.dto.VehicleRequestDTO;
 import br.com.jorgerabellodev.jpark.model.dto.VehicleResponseDTO;
@@ -18,6 +16,8 @@ import org.flywaydb.core.api.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,5 +46,21 @@ public class VehicleController {
   public ResponseEntity<VehicleResponseDTO> create(@Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
     VehicleResponseDTO vehicle = service.create(vehicleRequestDTO);
     return new ResponseEntity<>(vehicle, HttpStatus.CREATED);
+  }
+
+  @Operation(summary = "Recupera uma veículo pela placa.", description = "Dado uma placa recupera os dados de um veículo cadastrada.", tags = "vehicle")
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "Veículo encontrado.", content = @Content(schema = @Schema(implementation = VehicleResponseDTO.class))),
+          @ApiResponse(responseCode = "404",
+                  description = "Veículo não encontrado",
+                  content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+          @ApiResponse(responseCode = "415",
+                  description = "Mídia não suportada, por favor utilize o MediaType application/json",
+                  content = @Content(schema = @Schema(implementation = ErrorDetails.class)))
+  })
+  @GetMapping(path = "/{plate}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<VehicleResponseDTO> findByPlate(@PathVariable("plate") String plate) {
+    VehicleResponseDTO vehicle = service.findByPlate(plate);
+    return new ResponseEntity<>(vehicle, HttpStatus.OK);
   }
 }
