@@ -9,5 +9,6 @@ public record VehicleRequestDTO(
         @NotNull @NotEmpty String model,
         @NotNull @NotEmpty String color,
         @NotNull @NotEmpty String plate,
-        @NotNull VehicleType type) {
+        @NotNull VehicleType type,
+        @NotNull Long companyId) {
 }
