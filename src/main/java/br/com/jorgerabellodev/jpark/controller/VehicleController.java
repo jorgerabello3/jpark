@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,5 +83,21 @@ public class VehicleController {
                                                    @Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
     VehicleResponseDTO savedVehicle = service.update(vehicleRequestDTO, plate);
     return new ResponseEntity<>(savedVehicle, HttpStatus.OK);
+  }
+
+  @Operation(summary = "Excluí um veículo.", description = "Excluí um veículo cadastrado.", tags = "vehicle")
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "204", description = "Veículo excluído com sucesso."),
+          @ApiResponse(responseCode = "404",
+                  description = "Veículo não encontrado",
+                  content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+          @ApiResponse(responseCode = "415",
+                  description = "Mídia não suportada, por favor utilize o MediaType application/json",
+                  content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+  })
+  @DeleteMapping(path = "/{plate}")
+  public ResponseEntity<Void> delete(@PathVariable("plate") String plate) {
+    service.delete(plate);
+    return ResponseEntity.noContent().build();
   }
 }

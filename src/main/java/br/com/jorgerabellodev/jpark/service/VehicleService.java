@@ -58,4 +58,10 @@ public class VehicleService {
 
     return mapper.toResponseDTO(savedVehicle);
   }
+
+  public void delete(String plate) {
+    Vehicle vehicle = this.findByVehiclePlate(plate);
+    repository.delete(vehicle);
+    log.info("Successfully deleted vehicle by plate: {} {}", vehicle, plate);
+  }
 }

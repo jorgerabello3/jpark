@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.instancio.Select.field;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -185,5 +186,17 @@ class VehicleServiceTest {
     verify(repository).findByPlate(anyString());
     verify(repository).save(any(Vehicle.class));
     verify(mapper).toResponseDTO(any(Vehicle.class));
+  }
+
+  @Test
+  @DisplayName("Given an existent plate should delete a vehicle successfully")
+  void given_an_existent_plate_should_delete_a_vehicle_successfully() {
+    Vehicle vehicle = Instancio.create(Vehicle.class);
+
+    when(repository.findByPlate(anyString())).thenReturn(Optional.of(vehicle));
+
+    assertDoesNotThrow(() -> service.delete("EZF1M30"));
+
+    verify(repository).delete(any(Vehicle.class));
   }
 }

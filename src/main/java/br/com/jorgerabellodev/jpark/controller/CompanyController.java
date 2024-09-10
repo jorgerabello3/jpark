@@ -98,7 +98,7 @@ public class CompanyController {
                   description = "Mídia não suportada, por favor utilize o MediaType application/json",
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
-  @DeleteMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @DeleteMapping(path = "/{id}")
   public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
