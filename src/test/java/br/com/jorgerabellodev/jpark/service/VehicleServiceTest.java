@@ -119,4 +119,71 @@ class VehicleServiceTest {
     verify(repository).findByPlate(anyString());
     verify(mapper, never()).toResponseDTO(any(Vehicle.class));
   }
+
+  @Test
+  @DisplayName("Given a vehicle and an existent plate should update data")
+  void given_a_vehicle_and_an_existent_plate_should_update_data() {
+    Vehicle foundVehicle = Instancio.ofBlank(Vehicle.class)
+            .set(field("id"), 1L)
+            .set(field("brand"), "Lamborghini")
+            .set(field("model"), "Diablo")
+            .set(field("color"), "Red")
+            .set(field("plate"), "FIX9J22")
+            .set(field("type"), VehicleType.CAR)
+            .create();
+    when(repository.findByPlate(anyString())).thenReturn(Optional.of(foundVehicle));
+
+
+    Vehicle vehicle = Instancio.ofBlank(Vehicle.class)
+            .set(field("id"), 1L)
+            .set(field("brand"), "Lamborghini")
+            .set(field("model"), "Diablo")
+            .set(field("color"), "White")
+            .set(field("plate"), "FIX9J22")
+            .set(field("type"), VehicleType.CAR)
+            .create();
+    when(mapper.toEntity(any(VehicleRequestDTO.class))).thenReturn(vehicle);
+
+    Vehicle savedVehicle = Instancio.ofBlank(Vehicle.class)
+            .set(field("id"), 1L)
+            .set(field("brand"), "Lamborghini")
+            .set(field("model"), "Diablo")
+            .set(field("color"), "White")
+            .set(field("plate"), "FIX9J22")
+            .set(field("type"), VehicleType.CAR)
+            .create();
+    when(repository.save(any(Vehicle.class))).thenReturn(savedVehicle);
+
+    VehicleResponseDTO response = Instancio.ofBlank(VehicleResponseDTO.class)
+            .set(field("id"), 1L)
+            .set(field("brand"), "Lamborghini")
+            .set(field("model"), "Diablo")
+            .set(field("color"), "White")
+            .set(field("plate"), "FIX9J22")
+            .set(field("type"), VehicleType.CAR)
+            .create();
+    when(mapper.toResponseDTO(any(Vehicle.class))).thenReturn(response);
+
+    VehicleRequestDTO vehicleRequestDTO = Instancio.ofBlank(VehicleRequestDTO.class)
+            .set(field("brand"), "Lamborghini")
+            .set(field("model"), "Diablo")
+            .set(field("color"), "White")
+            .set(field("type"), VehicleType.CAR)
+            .create();
+
+    VehicleResponseDTO result = service.update(vehicleRequestDTO, "FIX9J22");
+
+
+    assertThat(result).isNotNull();
+
+    assertThat(result.brand()).isEqualTo("Lamborghini");
+    assertThat(result.model()).isEqualTo("Diablo");
+    assertThat(result.plate()).isEqualTo("FIX9J22");
+    assertThat(result.type()).isEqualTo(VehicleType.CAR);
+
+    verify(mapper).toEntity(any(VehicleRequestDTO.class));
+    verify(repository).findByPlate(anyString());
+    verify(repository).save(any(Vehicle.class));
+    verify(mapper).toResponseDTO(any(Vehicle.class));
+  }
 }

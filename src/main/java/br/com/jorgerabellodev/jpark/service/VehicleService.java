@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,4 +41,21 @@ public class VehicleService {
     });
   }
 
+  public VehicleResponseDTO update(VehicleRequestDTO vehicleRequestDTO, String plate) {
+    Vehicle vehicle = this.findByVehiclePlate(plate);
+
+    Vehicle data = mapper.toEntity(vehicleRequestDTO);
+
+    vehicle.setBrand(Objects.nonNull(data.getBrand()) ? data.getBrand() : vehicle.getBrand());
+    vehicle.setModel(Objects.nonNull(data.getModel()) ? data.getModel() : vehicle.getModel());
+    vehicle.setColor(Objects.nonNull(data.getColor()) ? data.getColor() : vehicle.getColor());
+    vehicle.setPlate(Objects.nonNull(data.getPlate()) ? data.getPlate() : vehicle.getPlate());
+    vehicle.setType(Objects.nonNull(data.getType()) ? data.getType() : vehicle.getType());
+
+    Vehicle savedVehicle = repository.save(vehicle);
+
+    log.info("Successfully update vehicle by plate: {} {}", vehicle, plate);
+
+    return mapper.toResponseDTO(savedVehicle);
+  }
 }

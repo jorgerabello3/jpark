@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.flywaydb.core.api.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +42,7 @@ public class CompanyController {
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
           @ApiResponse(responseCode = "415",
                   description = "Mídia não suportada, por favor utilize o MediaType application/json",
-                  content = @Content(schema = @Schema(implementation = ErrorDetails.class)))
+                  content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CompanyResponseDTO> create(@Valid @RequestBody CompanyRequestDTO companyRequestDTO) {
@@ -60,7 +59,7 @@ public class CompanyController {
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
           @ApiResponse(responseCode = "415",
                   description = "Mídia não suportada, por favor utilize o MediaType application/json",
-                  content = @Content(schema = @Schema(implementation = ErrorDetails.class)))
+                  content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
   @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CompanyResponseDTO> findById(@PathVariable("id") Long id) {
@@ -80,7 +79,7 @@ public class CompanyController {
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
           @ApiResponse(responseCode = "415",
                   description = "Mídia não suportada, por favor utilize o MediaType application/json",
-                  content = @Content(schema = @Schema(implementation = ErrorDetails.class)))
+                  content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
   @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CompanyResponseDTO> update(@PathVariable("id") Long id,
@@ -97,7 +96,7 @@ public class CompanyController {
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
           @ApiResponse(responseCode = "415",
                   description = "Mídia não suportada, por favor utilize o MediaType application/json",
-                  content = @Content(schema = @Schema(implementation = ErrorDetails.class)))
+                  content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
   @DeleteMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
