@@ -1,0 +1,12 @@
+CREATE SEQUENCE company_sequence
+  INCREMENT 1
+  START 1;
+
+
+CREATE SEQUENCE address_sequence
+  INCREMENT 1
+  START 1;
+
+CREATE SEQUENCE phone_sequence
+  INCREMENT 1
+  START 1
