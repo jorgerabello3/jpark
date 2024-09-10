@@ -48,7 +48,15 @@ public class CompanyService {
 
     Company savedCompany = repository.save(company);
 
+    log.info("Successfully update company by id: {} {}", company, id);
+
     return mapper.toResponseDTO(savedCompany);
+  }
+
+  public void delete(Long id) {
+    Company company = this.findCompanyById(id);
+    repository.delete(company);
+    log.info("Successfully deleted company by id: {} {}", company, id);
   }
 
   private Company findCompanyById(Long id) {
@@ -57,10 +65,5 @@ public class CompanyService {
       log.error("Failed to retrieve company for id {} {}", id, exception.getMessage());
       return exception;
     });
-  }
-
-  public void delete(Long id) {
-    Company company = this.findCompanyById(id);
-    repository.delete(company);
   }
 }
