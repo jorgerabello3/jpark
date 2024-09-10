@@ -1,9 +1,9 @@
 package br.com.jorgerabellodev.jpark.controller;
 
-import br.com.jorgerabellodev.jpark.model.dto.CompanyRequestDTO;
-import br.com.jorgerabellodev.jpark.model.dto.CompanyResponseDTO;
 import br.com.jorgerabellodev.jpark.model.dto.ErrorDTO;
-import br.com.jorgerabellodev.jpark.service.CompanyService;
+import br.com.jorgerabellodev.jpark.model.dto.VehicleRequestDTO;
+import br.com.jorgerabellodev.jpark.model.dto.VehicleResponseDTO;
+import br.com.jorgerabellodev.jpark.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,19 +24,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
-@Tag(name = "company")
+@Tag(name = "vehicle")
 @RequiredArgsConstructor
-@RequestMapping(value = "/company")
-public class CompanyController {
+@RequestMapping(value = "/vehicle")
+public class VehicleController {
 
-  private final CompanyService service;
+  private final VehicleService service;
 
-  @Operation(summary = "Cadastra uma nova empresa", description = "Realiza o cadastro de uma nova empresa.", tags = "company")
+  @Operation(summary = "Cadastra um novo veículo", description = "Realiza o cadastro de novo veículo.", tags = "vehicle")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "201", description = "Empresa cadastrada com sucesso.",
-                  content = @Content(schema = @Schema(implementation = CompanyResponseDTO.class))),
+          @ApiResponse(responseCode = "201", description = "Veículo cadastrado com sucesso.",
+                  content = @Content(schema = @Schema(implementation = VehicleResponseDTO.class))),
           @ApiResponse(responseCode = "400",
                   description = "Bad request body inválido",
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
@@ -45,34 +44,32 @@ public class CompanyController {
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CompanyResponseDTO> create(@Valid @RequestBody CompanyRequestDTO companyRequestDTO) {
-    CompanyResponseDTO company = service.create(companyRequestDTO);
-    return new ResponseEntity<>(company, HttpStatus.CREATED);
+  public ResponseEntity<VehicleResponseDTO> create(@Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
+    VehicleResponseDTO vehicle = service.create(vehicleRequestDTO);
+    return new ResponseEntity<>(vehicle, HttpStatus.CREATED);
   }
 
-
-  @Operation(summary = "Recupera uma empresa pelo id.", description = "Dado um id recupera os dados de uma empresa cadastrada.", tags = "company")
+  @Operation(summary = "Recupera uma veículo pela placa.", description = "Dado uma placa recupera os dados de um veículo cadastrado.", tags = "vehicle")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Empresa encontrada.", content = @Content(schema = @Schema(implementation = CompanyResponseDTO.class))),
+          @ApiResponse(responseCode = "200", description = "Veículo encontrado.", content = @Content(schema = @Schema(implementation = VehicleResponseDTO.class))),
           @ApiResponse(responseCode = "404",
-                  description = "Empresa não encontrada",
+                  description = "Veículo não encontrado",
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
           @ApiResponse(responseCode = "415",
                   description = "Mídia não suportada, por favor utilize o MediaType application/json",
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
-  @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CompanyResponseDTO> findById(@PathVariable("id") Long id) {
-    CompanyResponseDTO company = service.findById(id);
-    return new ResponseEntity<>(company, HttpStatus.OK);
+  @GetMapping(path = "/{plate}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<VehicleResponseDTO> findByPlate(@PathVariable("plate") String plate) {
+    VehicleResponseDTO vehicle = service.findByPlate(plate);
+    return new ResponseEntity<>(vehicle, HttpStatus.OK);
   }
 
-
-  @Operation(summary = "Atualiza os dados de uma empresa.", description = "Atualiza os dados de uma empresa cadastrada.", tags = "company")
+  @Operation(summary = "Atualiza os dados de um veículo.", description = "Atualiza os dados de um veículo cadastrado.", tags = "vehicle")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Empresa atualizada com sucesso.", content = @Content(schema = @Schema(implementation = CompanyResponseDTO.class))),
+          @ApiResponse(responseCode = "200", description = "Veículo atualizado com sucesso.", content = @Content(schema = @Schema(implementation = VehicleResponseDTO.class))),
           @ApiResponse(responseCode = "404",
-                  description = "Empresa não encontrada",
+                  description = "Veículo não encontrado",
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
           @ApiResponse(responseCode = "400",
                   description = "Bad request body inválido",
@@ -81,26 +78,26 @@ public class CompanyController {
                   description = "Mídia não suportada, por favor utilize o MediaType application/json",
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
-  @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CompanyResponseDTO> update(@PathVariable("id") Long id,
-                                                   @Valid @RequestBody CompanyRequestDTO companyRequestDTO) {
-    CompanyResponseDTO savedCompany = service.update(companyRequestDTO, id);
-    return new ResponseEntity<>(savedCompany, HttpStatus.OK);
+  @PutMapping(path = "/{plate}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<VehicleResponseDTO> update(@PathVariable("plate") String plate,
+                                                   @Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
+    VehicleResponseDTO savedVehicle = service.update(vehicleRequestDTO, plate);
+    return new ResponseEntity<>(savedVehicle, HttpStatus.OK);
   }
 
-  @Operation(summary = "Excluí uma empresa.", description = "Excluí uma empresa cadastrada.", tags = "company")
+  @Operation(summary = "Excluí um veículo.", description = "Excluí um veículo cadastrado.", tags = "vehicle")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "204", description = "Empresa excluída com sucesso."),
+          @ApiResponse(responseCode = "204", description = "Veículo excluído com sucesso."),
           @ApiResponse(responseCode = "404",
-                  description = "Empresa não encontrada",
+                  description = "Veículo não encontrado",
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
           @ApiResponse(responseCode = "415",
                   description = "Mídia não suportada, por favor utilize o MediaType application/json",
                   content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
   })
-  @DeleteMapping(path = "/{id}")
-  public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-    service.delete(id);
+  @DeleteMapping(path = "/{plate}")
+  public ResponseEntity<Void> delete(@PathVariable("plate") String plate) {
+    service.delete(plate);
     return ResponseEntity.noContent().build();
   }
 }
